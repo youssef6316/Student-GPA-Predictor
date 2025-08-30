@@ -108,7 +108,7 @@ if page == "🔮 Predictions":
             valid = False
 
         # ✅ Save results in session state
-        st.session_state.valid = v
+        st.session_state.valid = valid
         if valid:
             st.session_state.inputs = inputs
             st.success("✅ All inputs are valid, ready for prediction!")
