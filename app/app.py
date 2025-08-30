@@ -8,6 +8,17 @@ import time
 from streamlit_lottie import st_lottie
 import requests
 
+import os
+
+def save_user_data(user_data, filename="user_logs.csv"):
+    if os.path.exists(filename):
+        df = pd.read_csv(filename)
+    else:
+        df = pd.DataFrame()
+
+    df = pd.concat([df, pd.DataFrame([user_data])], ignore_index=True)
+    df.to_csv(filename, index=False)
+
 
 # Helper to load Lottie animations
 def load_lottieurl(url: str):
@@ -97,7 +108,7 @@ if page == "🔮 Predictions":
             valid = False
 
         # ✅ Save results in session state
-        st.session_state.valid = valid
+        st.session_state.valid = v
         if valid:
             st.session_state.inputs = inputs
             st.success("✅ All inputs are valid, ready for prediction!")
