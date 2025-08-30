@@ -4,6 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import joblib
+import datetime
 import time
 from streamlit_lottie import st_lottie
 import requests
@@ -112,6 +113,20 @@ if page == "🔮 Predictions":
         if valid:
             st.session_state.inputs = inputs
             st.success("✅ All inputs are valid, ready for prediction!")
+
+            user_data = {
+                "timestamp": datetime.datetime.now(),
+                "username": name,
+                "GPA": gpa,
+                "age": age,
+                "study_hours": study_time,
+                "absences": absences
+            }
+
+            # Save to CSV (replace with DB in production)
+            df = pd.DataFrame([user_data])
+            df.to_csv("user_data.csv", mode="a", header=not pd.io.common.file_exists("user_data.csv"), index=False)
+
             # Fetch validated inputs
             inputs = st.session_state.inputs
             study_time = inputs["study_time"]
