@@ -34,7 +34,7 @@ success_anim = load_lottieurl("https://assets4.lottiefiles.com/packages/lf20_tou
 chart_anim = load_lottieurl("https://assets2.lottiefiles.com/packages/lf20_qp1q7mct.json")
 
 # Load model
-model = joblib.load(r"Models/best_reg_model.joblib")
+model = joblib.load(os.path.join(os.path.dirname(__file__), "..", "Models", "best_reg_model.joblib"))
 # Sidebar legend with navigation
 st.sidebar.title("📌 Menu")
 page = st.sidebar.radio("Choose a Section", ["🔮 Predictions", "📊 Plots & Insights"])
