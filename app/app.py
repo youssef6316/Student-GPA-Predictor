@@ -21,19 +21,41 @@ def get_gsheet_client():
     client = gspread.authorize(creds)
     return client
 
-def save_user_data(user_data, sheet_name="UserLogs"):
-    client = get_gsheet_client()
-    # Open or create the sheet
+def save_user_data(name, age, study_hours, absences, gpa, prediction):
+    """
+    Save user input + prediction to Google Sheets
+    """
     try:
-        sheet = client.open(sheet_name).sheet1
-    except gspread.SpreadsheetNotFound:
-        # If not exists, create a new one
-        sheet = client.create(sheet_name).sheet1
-        sheet.append_row(list(user_data.keys()))  # header row
+        # Define the scope
+        scope = ["https://www.googleapis.com/auth/spreadsheets",
+                 "https://www.googleapis.com/auth/drive"]
 
-    # Append the new row
-    sheet.append_row(list(user_data.values()))
+        # Authenticate using Streamlit secrets (your TOML)
+        creds = ServiceAccountCredentials.from_json_keyfile_dict(
+            st.secrets["gcp_service_account"], scope
+        )
+        client = gspread.authorize(creds)
 
+        # Open Google Sheet (replace with your sheet ID)
+        sheet = client.open_by_key("131mJWdDZsFYAgCig6NDUUGLtrfWv24L4j7YnLGiND6w").sheet1
+
+        # Prepare the row
+        row = [
+            name,
+            age,
+            study_hours,
+            absences,
+            gpa,
+            prediction,
+            datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # add timestamp
+        ]
+
+        # Append row to sheet
+        sheet.append_row(row)
+        st.success("✅ User data saved successfully!")
+
+    except Exception as e:
+        st.error(f"❌ Failed to save data: {e}")
 
 # Helper to load Lottie animations
 def load_lottieurl(url: str):
