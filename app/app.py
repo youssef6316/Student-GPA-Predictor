@@ -283,19 +283,19 @@ elif page == "📊 Plots & Insights":
         model_scores = {
             "Linear Regression": {"Best train R²": 0.718,
                                   "Best test R²": 0.716,
-                                  "Prediction time (ms)": 0.3413},
+                                  "Prediction time (ms)": 0.181},
             "SVR": {"Best train R²": 0.897,
                     "Best test R²": 0.894,
-                    "Prediction time (ms)": 1.1576},
+                    "Prediction time (ms)": 0.6546},
             "KNN": {"Best train R²": 1.0,
                     "Best test R²": 0.84,
-                    "Prediction time (ms)": 1.0698},
-            "Random Forest": {"Best train R²": 0.999,
-                              "Best test R²": 0.995,
-                              "Prediction time (ms)": 5.8188},
+                    "Prediction time (ms)": 0.5177},
             "Decision Tree": {"Best train R²": 0.997,
                               "Best test R²": 0.986,
-                              "Prediction time (ms)": 0.5271}
+                              "Prediction time (ms)": 0.2567},
+            "Random Forest": {"Best train R²": 0.999,
+                              "Best test R²": 0.995,
+                              "Prediction time (ms)": 3.986}
         }
 
         # --- Accuracy DataFrame ---
