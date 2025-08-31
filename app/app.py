@@ -14,49 +14,6 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 import os
 
-@st.cache_resource
-def get_gsheet_client():
-    scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    creds = ServiceAccountCredentials.from_json_keyfile_dict(st.secrets["gcp_service_account"], scope)
-    client = gspread.authorize(creds)
-    return client
-
-def save_user_data(name, age, study_hours, absences, gpa, prediction):
-    """
-    Save user input + prediction to Google Sheets
-    """
-    try:
-        # Define the scope
-        scope = ["https://www.googleapis.com/auth/spreadsheets",
-                 "https://www.googleapis.com/auth/drive"]
-
-        # Authenticate using Streamlit secrets (your TOML)
-        creds = ServiceAccountCredentials.from_json_keyfile_dict(
-            st.secrets["gcp_service_account"], scope
-        )
-        client = gspread.authorize(creds)
-
-        # Open Google Sheet (replace with your sheet ID)
-        sheet = client.open_by_key("131mJWdDZsFYAgCig6NDUUGLtrfWv24L4j7YnLGiND6w").sheet1
-
-        # Prepare the row
-        row = [
-            name,
-            age,
-            study_hours,
-            absences,
-            gpa,
-            prediction,
-            datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # add timestamp
-        ]
-
-        # Append row to sheet
-        sheet.append_row(row)
-        st.success("✅ User data saved successfully!")
-
-    except Exception as e:
-        st.error(f"❌ Failed to save data: {e}")
-
 # Helper to load Lottie animations
 def load_lottieurl(url: str):
     r = requests.get(url)
@@ -150,17 +107,6 @@ if page == "🔮 Predictions":
             st.session_state.inputs = inputs
             st.success("✅ All inputs are valid, ready for prediction!")
 
-            User_data = {
-                "timestamp": datetime.datetime.now(),
-                "username": name,
-                "GPA": gpa,
-                "age": age,
-                "study_hours": study_time,
-                "absences": absences
-            }
-
-            # Save to CSV (replace with DB in production)
-            save_user_data(User_data)
 
             # Fetch validated inputs
             inputs = st.session_state.inputs
