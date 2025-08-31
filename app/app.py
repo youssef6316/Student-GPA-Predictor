@@ -128,7 +128,7 @@ if page == "🔮 Predictions":
             st.session_state.inputs = inputs
             st.success("✅ All inputs are valid, ready for prediction!")
 
-            user_data = {
+            User_data = {
                 "timestamp": datetime.datetime.now(),
                 "username": name,
                 "GPA": gpa,
@@ -138,7 +138,7 @@ if page == "🔮 Predictions":
             }
 
             # Save to CSV (replace with DB in production)
-            save_user_data(user_data)
+            save_user_data(User_data)
 
             # Fetch validated inputs
             inputs = st.session_state.inputs
