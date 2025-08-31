@@ -9,16 +9,30 @@ import time
 from streamlit_lottie import st_lottie
 import requests
 
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+
 import os
 
-def save_user_data(user_data, filename="user_logs.csv"):
-    if os.path.exists(filename):
-        df = pd.read_csv(filename)
-    else:
-        df = pd.DataFrame()
+@st.cache_resource
+def get_gsheet_client():
+    scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+    creds = ServiceAccountCredentials.from_json_keyfile_dict(st.secrets["gcp_service_account"], scope)
+    client = gspread.authorize(creds)
+    return client
 
-    df = pd.concat([df, pd.DataFrame([user_data])], ignore_index=True)
-    df.to_csv(filename, index=False)
+def save_user_data(user_data, sheet_name="UserLogs"):
+    client = get_gsheet_client()
+    # Open or create the sheet
+    try:
+        sheet = client.open(sheet_name).sheet1
+    except gspread.SpreadsheetNotFound:
+        # If not exists, create a new one
+        sheet = client.create(sheet_name).sheet1
+        sheet.append_row(list(user_data.keys()))  # header row
+
+    # Append the new row
+    sheet.append_row(list(user_data.values()))
 
 
 # Helper to load Lottie animations
@@ -124,8 +138,7 @@ if page == "🔮 Predictions":
             }
 
             # Save to CSV (replace with DB in production)
-            df = pd.DataFrame([user_data])
-            df.to_csv("user_data.csv", mode="a", header=not pd.io.common.file_exists("user_data.csv"), index=False)
+            save_user_data(user_data)
 
             # Fetch validated inputs
             inputs = st.session_state.inputs
