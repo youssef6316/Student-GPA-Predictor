@@ -4,13 +4,9 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import joblib
-import datetime
 import time
 from streamlit_lottie import st_lottie
 import requests
-
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
 
 import os
 
